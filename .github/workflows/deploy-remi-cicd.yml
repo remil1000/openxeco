@@ -17,7 +17,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: install venv
-      run: apt-get update && apt-get install -y --no-install-recommends python3 python3-venv
+      run: sudo apt-get update && sudo apt-get install -y --no-install-recommends python3 python3-venv
 
     - name: install requirements
       run: |
