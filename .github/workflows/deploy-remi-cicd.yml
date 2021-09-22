@@ -48,4 +48,4 @@ jobs:
       run: ssh-keyscan -H test.cy.lu >> ~/.ssh/known_hosts
 
     - name: rsync
-      run: rsync -v -r --exclude=.git --exclude=.gitignore --exclude=.github ./ cyberluxremi@test.cy.lu:/var/www/bo-api-remi/
+      run: rsync -r --delete --exclude=.git --exclude=.gitignore --exclude=.github ./ cyberluxremi@test.cy.lu:/var/www/bo-api-remi
