@@ -16,6 +16,15 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: cache python venv
+      uses: actions/cache@v2
+      with:
+        path: venv
+        key: ${{ runner.os }}-venv-${{ hashFiles('requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-venv-
+
+
     - name: install venv
       run: sudo apt-get update && sudo apt-get install -y --no-install-recommends python3 python3-venv
 
@@ -39,4 +48,4 @@ jobs:
       run: ssh-keyscan -H test.cy.lu >> ~/.ssh/known_hosts
 
     - name: rsync
-      run: rsync -r --exclude=.git --exclude=.gitignore --exclude=.github ./ cyberluxremi@test.cy.lu:/var/www/bo-api-remi/
+      run: rsync -v -r --exclude=.git --exclude=.gitignore --exclude=.github ./ cyberluxremi@test.cy.lu:/var/www/bo-api-remi/
