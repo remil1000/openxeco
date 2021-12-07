@@ -16,21 +16,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Create user
---
-
-CREATE USER 'cyberlux'@'localhost' IDENTIFIED BY 's0mething_mor3_complex_here!!';
-GRANT SELECT, INSERT, UPDATE, DELETE ON CYBERLUX.* TO 'cyberlux'@'localhost';
-
---
--- Current Database: `CYBERLUX`
---
-
-CREATE DATABASE /*!32312 IF NOT EXISTS*/ `CYBERLUX` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-
-USE `CYBERLUX`;
-
---
 -- Table structure for table `Article`
 --
 

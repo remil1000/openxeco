@@ -11,6 +11,11 @@ from apispec import APISpec
 from apispec.ext.marshmallow import MarshmallowPlugin
 from flask_apispec.extension import FlaskApiSpec
 
+# initial password generation
+from flask_bcrypt import generate_password_hash
+from utils.password import generate_password
+from utils.re import has_mail_format
+
 try:
     from config import config
 except ImportError:
@@ -46,7 +51,7 @@ application.config['MAIL_USE_TLS'] = config.MAIL_USE_TLS == "True"
 application.config['MAIL_USE_SSL'] = config.MAIL_USE_SSL == "True"
 application.config['MAIL_DEFAULT_SENDER'] = config.MAIL_DEFAULT_SENDER
 
-application.config['PROPAGATE_EXCEPTIONS'] = True
+application.config['PROPAGATE_EXCEPTIONS'] = config.ENVIRONMENT == "dev"
 
 application.config['SCHEDULER_API_ENABLED'] = False
 
@@ -77,14 +82,32 @@ api = Api(application)
 def undefined_route(_):
     return '', 404
 
+def create_initial_admin(email):
+    if not has_mail_format(email):
+        raise Exception("The email does not have the right format")
+    user = {
+        "email": email,
+        "password": generate_password_hash(generate_password()),
+        "is_active": 1,
+        "is_admin": 1
+    }
 
-if __name__ == 'application':
-    from routes import set_routes
-    set_routes({"api": api, "db": db, "mail": mail, "docs": docs})
+    try:
+        db.insert(user, db.tables["User"])
+        application.logger.info("initial user {} created\n".format(email))
+    except Exception as e:
+        if "Duplicate entry" in str(e):
+            application.logger.info("initial user {} already created\n".format(email))
+        else:
+            pass
 
-if __name__ == '__main__':
+if __name__ in ('application', '__main__'):
+    if config.INITIAL_ADMIN_EMAIL:
+        create_initial_admin(config.INITIAL_ADMIN_EMAIL)
+
     from routes import set_routes
     set_routes({"api": api, "db": db, "mail": mail, "docs": docs})
 
     application.debug = config.ENVIRONMENT == "dev"
-    application.run(threaded=True)
+    if __name__ == "__main__":
+        application.run()

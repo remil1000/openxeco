@@ -152,3 +152,6 @@ Thumbs.db
 
 # profiling data
 .prof
+
+# docker-compose runtime directory
+docker/run
