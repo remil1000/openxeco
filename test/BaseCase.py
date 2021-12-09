@@ -4,7 +4,7 @@ import unittest
 
 from flask_bcrypt import generate_password_hash
 
-from application import application
+from app import app
 from db.db import DB
 
 
@@ -15,9 +15,9 @@ class BaseCase(unittest.TestCase):
     db = None
 
     def setUp(self):
-        self.application = application.test_client()
-        application.config['SQLALCHEMY_DATABASE_URI'].database = "CYBERLUX_TEST"
-        self.db = DB(application)
+        self.application = app.test_client()
+        app.config['SQLALCHEMY_DATABASE_URI'].database = "CYBERLUX_TEST"
+        self.db = DB(app)
 
         self._truncate_database()
 

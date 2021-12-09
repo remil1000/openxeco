@@ -9,6 +9,7 @@ flask-bcrypt==0.7.1
 Flask-Cors==3.0.9
 flask-jwt-extended==3.25.0
 flask-mail==0.9.1
+flask-migrate==3.1.0
 Flask-RESTful==0.3.8
 Flask-SQLAlchemy==2.4.4
 html2markdown==0.1.7
