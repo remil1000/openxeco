@@ -68,9 +68,13 @@ For Windows
 
 # Import the database structure
 
+- create the cyberlux database, here `$cyberlux_db_name`
+- create a cyberlux database user here `$cyberlux_db_user`and grand it permissions on the database
+- import the initial databases schema:
+
 ```
 $ cd ~/project/bo-api
-$ mysql -u root -p < ./db/sql/cyberlux_structure.sql
+$ mysql -u "$cyberlux_db_user" -p "$cyberlux_db_name" < ./db/sql/structure.sql
 ```
 
 # Run environment

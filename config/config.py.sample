@@ -1,26 +1,42 @@
 import os
 
-ENVIRONMENT = os.getenv('ENVIRONMENT', 'dev')
+def _getenv(key, default=None, mandatory=True):
+    if mandatory:
+        if key in os.environ or not default is None:
+            return os.getenv(key, default)
+        else:
+            raise KeyError("environment variable '%s' not set" % key)
+    if not mandatory:
+        return os.getenv(key, default)
 
-JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY', "my_$secret_D3v3lop3r_k3Y")
+ENVIRONMENT    = _getenv('ENVIRONMENT',    default='dev')
+
+JWT_SECRET_KEY = _getenv('JWT_SECRET_KEY', mandatory=True)
 
 DB_CONFIG = {
-    'drivername': 'mysql+pymysql',
-    'username': os.getenv('DB_USERNAME', 'cyberlux'),
-    'password': os.getenv('DB_PASSWORD', 's0mething_mor3_complex_here!!'),
-    'host': os.getenv('DB_HOSTNAME', 'localhost'),
-    'port': os.getenv('DB_PORT', '3306'),
-    'database': os.getenv('DB_NAME', 'CYBERLUX'),
+    'drivername': _getenv('DB_DRIVER',    default='mysql+pymysql'),
+    'host':       _getenv('DB_HOSTNAME',  default='localhost'),
+    'port':       _getenv('DB_PORT',      default='3306'),
+    'database':   _getenv('DB_NAME',      default='CYBERLUX'),
+    'username':   _getenv('DB_USERNAME',  default='cyberlux'),
+    'password':   _getenv('DB_PASSWORD',  mandatory=True)
 }
 
-MAIL_SERVER = os.getenv('MAIL_SERVER', "localhost")
-MAIL_PORT = os.getenv('MAIL_PORT', "1025")
-MAIL_USERNAME = os.getenv('MAIL_USERNAME', "mail@address.com")
-MAIL_PASSWORD = os.getenv('MAIL_PASSWORD', None)
-MAIL_USE_TLS = os.getenv('MAIL_USE_TLS', "False")
-MAIL_USE_SSL = os.getenv('MAIL_USE_SSL', "False")
-MAIL_DEFAULT_SENDER = os.getenv('MAIL_DEFAULT_SENDER', "mail@address.com")
+MAIL_SERVER         = _getenv('MAIL_SERVER',     mandatory=False)
+MAIL_PORT           = _getenv('MAIL_PORT',       mandatory=False)
+MAIL_USERNAME       = _getenv('MAIL_USERNAME',   mandatory=False)
+MAIL_PASSWORD       = _getenv('MAIL_PASSWORD',   mandatory=False)
+MAIL_USE_TLS        = _getenv('MAIL_USE_TLS',    default="True")
+MAIL_USE_SSL        = _getenv('MAIL_USE_SSL',    default="True")
+MAIL_DEFAULT_SENDER = _getenv('MAIL_DEFAULT_SENDER', mandatory=True)
 
-IMAGE_FOLDER = os.getenv('IMAGE_FOLDER', "/tmp/image_folder")
+# if set the initial admin must issue a forgot password request
+# this implies mail delivery is properly configured
+INITIAL_ADMIN_EMAIL = _getenv('INITIAL_ADMIN_EMAIL', mandatory=False)
 
-CORS_ORIGINS = '*'
+IMAGE_FOLDER        = _getenv('IMAGE_FOLDER',     default="/cyberlux_media")
+
+CORS_DOMAINS        = _getenv('CORS_DOMAINS',    default="localhost:*")
+# remove extra spaces, remove empty items
+domains = filter(len, map(str.strip, CORS_DOMAINS.split(",")))
+CORS_ORIGINS = list(map(lambda d: r'(.*\.)?{}'.format(d), domains))
