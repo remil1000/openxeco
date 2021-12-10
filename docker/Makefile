@@ -1,4 +1,4 @@
-IMAGE_NAME?=cyberseclux-bo-api:latest
+IMAGE_NAME?=cybersecurityluxembourg-bo-api:latest
 
 image:
 	cd .. && docker build -t $(IMAGE_NAME) \

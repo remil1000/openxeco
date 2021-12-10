@@ -91,7 +91,7 @@ Then:
 ```
 # Copy and edit sample config
 $ cp config/config.py.sample config/config.py
-$ python application.py
+$ python app.py
 ```
 
 # Simulate SMTP server

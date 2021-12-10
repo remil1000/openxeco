@@ -40,7 +40,7 @@ COPY template       /app/template
 COPY utils          /app/utils
 
 COPY routes.py      /app/
-COPY application.py /app/application.py
+COPY app.py /app/app.py
 
 COPY config         /app/config
 COPY config/config.py.sample /app/config/config.py
