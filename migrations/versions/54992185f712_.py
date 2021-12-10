@@ -17,7 +17,7 @@ depends_on = None
 
 
 def upgrade():
-    op.add_column('User', 'vcard', Boolean(name=op.f('ck_bool_t_x')))
+    op.add_column('User', sa.Column('vcard', mysql.TEXT(charset='utf8mb4', collation='utf8mb4_unicode_ci'), nullable=True))
 
 
 def downgrade():
