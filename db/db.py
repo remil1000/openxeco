@@ -15,9 +15,9 @@ class SA(SQLAlchemy):
 class DB:
     engine = None
 
-    def __init__(self, application):
-        self.instance = SA(application)
-        self.instance.init_app(application)
+    def __init__(self, app):
+        self.instance = SA(app)
+        self.instance.init_app(app)
 
         self.session = self.instance.session
         self.engine = self.instance.engine
