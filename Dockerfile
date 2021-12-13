@@ -45,11 +45,9 @@ COPY template       /app/template
 COPY utils          /app/utils
 
 COPY config         /app/config
-COPY config/config.py.sample /app/config/config.py
-COPY docker/entrypoint.dev.sh /entrypoint2.sh
+#COPY docker/entrypoint.dev.sh /entrypoint2.sh
 
 EXPOSE 5000
-EXPOSE 25
 
 #RUN flask db upgrade
 
