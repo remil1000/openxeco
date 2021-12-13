@@ -1,5 +1,6 @@
 import os
 
+
 def _getenv(key, default=None, mandatory=True):
     if mandatory:
         if key in os.environ or not default is None:
@@ -9,6 +10,7 @@ def _getenv(key, default=None, mandatory=True):
     if not mandatory:
         return os.getenv(key, default)
 
+
 ENVIRONMENT    = _getenv('ENVIRONMENT',    default='dev')
 
 JWT_SECRET_KEY = _getenv('JWT_SECRET_KEY', mandatory=True)
@@ -17,8 +19,8 @@ DB_CONFIG = {
     'drivername': _getenv('DB_DRIVER',    default='mysql+pymysql'),
     'host':       _getenv('DB_HOSTNAME',  default='localhost'),
     'port':       _getenv('DB_PORT',      default='3306'),
-    'database':   _getenv('DB_NAME',      default='CYBERLUX'),
-    'username':   _getenv('DB_USERNAME',  default='cyberlux'),
+    'database':   _getenv('DB_NAME',      default='OPENXECO'),
+    'username':   _getenv('DB_USERNAME',  default='openxeco'),
     'password':   _getenv('DB_PASSWORD',  mandatory=True)
 }
 
@@ -34,7 +36,7 @@ MAIL_DEFAULT_SENDER = _getenv('MAIL_DEFAULT_SENDER', mandatory=True)
 # this implies mail delivery is properly configured
 INITIAL_ADMIN_EMAIL = _getenv('INITIAL_ADMIN_EMAIL', mandatory=False)
 
-IMAGE_FOLDER        = _getenv('IMAGE_FOLDER',     default="/cyberlux_media")
+IMAGE_FOLDER        = _getenv('IMAGE_FOLDER',     default="/openxeco_media")
 
 CORS_DOMAINS        = _getenv('CORS_DOMAINS',    default="localhost:*")
 # remove extra spaces, remove empty items

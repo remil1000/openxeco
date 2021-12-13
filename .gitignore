@@ -2,9 +2,6 @@
 .idea
 *.swp
 
-# Project config files
-config/config.py
-
 ### Python ###
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -16,13 +16,8 @@ from flask_bcrypt import generate_password_hash
 from utils.password import generate_password
 from utils.re import has_mail_format
 
-try:
-    from config import config
-except ImportError:
-    print("Please copy config.py.sample to config.py")
-    sys.exit(1)
-
 from db.db import DB
+from config import config
 
 
 # Manage DB connection

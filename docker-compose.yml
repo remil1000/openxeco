@@ -1,0 +1,45 @@
+version: "3"
+networks:
+  backend:
+    driver: bridge
+services:
+  openxeco-db:
+    image: mysql:8.0
+    restart: always
+    volumes:
+      - ./run/database:/var/lib/mysql
+      - ./db/sql/:/docker-entrypoint-initdb.d/:ro
+    environment:
+      MYSQL_ROOT_PASSWORD: wp
+      MYSQL_DATABASE: "openxeco"
+      MYSQL_TCP_PORT: "3309"
+      MYSQL_USER: "openxeco"
+      MYSQL_PASSWORD: "openxeco"
+    ports:
+      - '3309:3309'
+    networks:
+      - backend
+
+  openxeco-bo-api:
+    build: ./
+    restart: always
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./run/openxeco_media:/openxeco_media
+    environment:
+      DEBUG: "true"
+      DB_HOSTNAME: "openxeco-db"
+      DB_PORT: "3309"
+      DB_NAME: "openxeco"
+      DB_USERNAME: "root"
+      DB_PASSWORD: "wp"
+      JWT_SECRET_KEY: "some_random_secret"
+      MAIL_DEFAULT_SENDER: "openxeco@localhost.localdomain"
+      INITIAL_ADMIN_EMAIL: "your.email@localhost.localdomain"
+    links:
+      - openxeco-db
+    depends_on:
+      - openxeco-db
+    networks:
+      - backend
