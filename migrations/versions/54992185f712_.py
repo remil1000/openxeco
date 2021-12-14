@@ -19,8 +19,10 @@ depends_on = None
 def upgrade():
     op.add_column('User', sa.Column('vcard', mysql.TEXT(charset='utf8mb4', collation='utf8mb4_unicode_ci'), nullable=True))
     op.add_column('User', sa.Column('is_vcard_public', mysql.BOOLEAN()))
+    op.add_column('User', sa.Column('handle', mysql.VARCHAR(charset='utf8mb4', collation='utf8mb4_unicode_ci', length=255), nullable=True))
 
 
 def downgrade():
     op.drop_column('User', 'vcard')
+    op.drop_column('User', 'is_vcard_public')
     op.drop_column('User', 'is_vcard_public')

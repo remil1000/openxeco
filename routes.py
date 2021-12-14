@@ -74,6 +74,7 @@ from resource.private.add_request import AddRequest
 from resource.private.delete_my_article import DeleteMyArticle
 from resource.private.delete_my_request import DeleteMyRequest
 from resource.private.delete_my_user import DeleteMyUser
+from resource.private.generate_my_user_handle import GenerateMyUserHandle
 from resource.private.get_my_article import GetMyArticle
 from resource.private.get_my_article_content import GetMyArticleContent
 from resource.private.get_my_articles import GetMyArticles
@@ -101,6 +102,7 @@ from resource.public.get_public_company import GetPublicCompany
 from resource.public.get_public_settings import GetPublicSettings
 from resource.public.get_public_taxonomy_values import GetPublicTaxonomyValues
 from resource.public.get_public_taxonomy import GetPublicTaxonomy
+from resource.public.get_public_vcard import GetPublicVcard
 from resource.request.get_requests import GetRequests
 from resource.request.get_request_enums import GetRequestEnums
 from resource.request.update_request import UpdateRequest
