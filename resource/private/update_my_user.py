@@ -17,8 +17,8 @@ class UpdateMyUser(MethodResource, Resource):
 
     @log_request
     @doc(tags=['private'],
-         description='Update the user information related to the token. This is only applicable on last_name, '
-                     'first_name and telephone',
+         description='Update the user information related to the token. This is applicable to a limited'
+                     ' number of fields',
          responses={
              "200": {},
          })
@@ -27,6 +27,8 @@ class UpdateMyUser(MethodResource, Resource):
         'first_name': fields.Str(required=False, allow_none=True),
         'telephone': fields.Str(required=False, allow_none=True),
         'accept_communication': fields.Bool(required=False),
+        'vcard': fields.Str(required=False, allow_none=True),
+        'is_vcard_public': fields.Bool(required=False),
     })
     @jwt_required
     @catch_exception

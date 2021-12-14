@@ -6,6 +6,7 @@ from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from flask_mail import Mail
 from flask_restful import Api
+from flask_migrate import Migrate
 from sqlalchemy.engine.url import URL
 from apispec import APISpec
 from apispec.ext.marshmallow import MarshmallowPlugin
@@ -24,35 +25,35 @@ from config import config
 db_uri = URL(**config.DB_CONFIG)
 
 # Init Flask and set config
-application = Flask(__name__, template_folder="template")
-application.config['SQLALCHEMY_DATABASE_URI'] = db_uri
-application.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-application.config["ERROR_404_HELP"] = False
+app = Flask(__name__, template_folder="template")
+app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config["ERROR_404_HELP"] = False
 
-application.config["JWT_SECRET_KEY"] = config.JWT_SECRET_KEY
-application.config["JWT_TOKEN_LOCATION"] = ['headers', 'cookies']
-application.config["JWT_COOKIE_SECURE"] = config.ENVIRONMENT != "dev"
-application.config['JWT_COOKIE_CSRF_PROTECT'] = False
+app.config["JWT_SECRET_KEY"] = config.JWT_SECRET_KEY
+app.config["JWT_TOKEN_LOCATION"] = ['headers', 'cookies']
+app.config["JWT_COOKIE_SECURE"] = config.ENVIRONMENT != "dev"
+app.config['JWT_COOKIE_CSRF_PROTECT'] = False
 
-application.config['CORS_HEADERS'] = 'Content-Type'
-application.config["CORS_SUPPORTS_CREDENTIALS"] = True
-application.config["CORS_ORIGINS"] = config.CORS_ORIGINS if config.CORS_ORIGINS else []
+app.config['CORS_HEADERS'] = 'Content-Type'
+app.config["CORS_SUPPORTS_CREDENTIALS"] = True
+app.config["CORS_ORIGINS"] = config.CORS_ORIGINS if config.CORS_ORIGINS else []
 
-application.config['MAIL_SERVER'] = config.MAIL_SERVER
-application.config['MAIL_PORT'] = config.MAIL_PORT
-application.config['MAIL_USERNAME'] = config.MAIL_USERNAME
-application.config['MAIL_PASSWORD'] = config.MAIL_PASSWORD
-application.config['MAIL_USE_TLS'] = config.MAIL_USE_TLS == "True"
-application.config['MAIL_USE_SSL'] = config.MAIL_USE_SSL == "True"
-application.config['MAIL_DEFAULT_SENDER'] = config.MAIL_DEFAULT_SENDER
+app.config['MAIL_SERVER'] = config.MAIL_SERVER
+app.config['MAIL_PORT'] = config.MAIL_PORT
+app.config['MAIL_USERNAME'] = config.MAIL_USERNAME
+app.config['MAIL_PASSWORD'] = config.MAIL_PASSWORD
+app.config['MAIL_USE_TLS'] = config.MAIL_USE_TLS == "True"
+app.config['MAIL_USE_SSL'] = config.MAIL_USE_SSL == "True"
+app.config['MAIL_DEFAULT_SENDER'] = config.MAIL_DEFAULT_SENDER
 
-application.config['PROPAGATE_EXCEPTIONS'] = config.ENVIRONMENT == "dev"
+app.config['PROPAGATE_EXCEPTIONS'] = config.ENVIRONMENT == "dev"
 
-application.config['SCHEDULER_API_ENABLED'] = False
+app.config['SCHEDULER_API_ENABLED'] = False
 
-application.config['APISPEC_SWAGGER_URL'] = '/doc/json'
-application.config['APISPEC_SWAGGER_UI_URL'] = '/doc/'
-application.config['APISPEC_SPEC'] = APISpec(
+app.config['APISPEC_SWAGGER_URL'] = '/doc/json'
+app.config['APISPEC_SWAGGER_UI_URL'] = '/doc/'
+app.config['APISPEC_SPEC'] = APISpec(
     title='openXeco API',
     version='v1.6',
     plugins=[MarshmallowPlugin()],
@@ -60,20 +61,21 @@ application.config['APISPEC_SPEC'] = APISpec(
 )
 
 # Create DB instance
-db = DB(application)
+db = DB(app)
+migrate = Migrate(app, db.instance)
 
 # Add additional plugins
-cors = CORS(application)
-bcrypt = Bcrypt(application)
-jwt = JWTManager(application)
-mail = Mail(application)
-docs = FlaskApiSpec(application)
+cors = CORS(app)
+bcrypt = Bcrypt(app)
+jwt = JWTManager(app)
+mail = Mail(app)
+docs = FlaskApiSpec(app)
 
 # Init and set the resources for Flask
-api = Api(application)
+api = Api(app)
 
 
-@application.route('/<generic>')
+@app.route('/<generic>')
 def undefined_route(_):
     return '', 404
 
@@ -90,21 +92,21 @@ def create_initial_admin(email):
 
     try:
         db.insert(user, db.tables["User"])
-        application.logger.info("initial user {} created\n".format(email))
+        app.logger.info("initial user {} created\n".format(email))
     except Exception as e:
         if "Duplicate entry" in str(e):
-            application.logger.info("initial user {} already created\n".format(email))
+            app.logger.info("initial user {} already created\n".format(email))
         else:
             pass
 
 
-if __name__ in ('application', '__main__'):
+if __name__ in ('app', '__main__'):
     if config.INITIAL_ADMIN_EMAIL:
         create_initial_admin(config.INITIAL_ADMIN_EMAIL)
 
     from routes import set_routes
     set_routes({"api": api, "db": db, "mail": mail, "docs": docs})
 
-    application.debug = config.ENVIRONMENT == "dev"
+    app.debug = config.ENVIRONMENT == "dev"
     if __name__ == "__main__":
-        application.run()
+        app.run()
