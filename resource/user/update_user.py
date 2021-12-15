@@ -30,12 +30,6 @@ class UpdateUser(MethodResource, Resource):
         'is_admin': fields.Bool(required=False),
         'is_active': fields.Bool(required=False),
         'accept_communication': fields.Bool(required=False),
-        'company_on_subscription': fields.Str(required=False, allow_none=True),
-        'department_on_subscription': fields.Str(
-            required=False,
-            allow_none=True,
-            validate=lambda x: x in ['TOP MANAGEMENT', 'HUMAN RESOURCE', 'MARKETING', 'FINANCE', 'OPERATION/PRODUCTION',
-                                     'INFORMATION TECHNOLOGY', 'OTHER', None]),
     })
     @jwt_required
     @verify_admin_access

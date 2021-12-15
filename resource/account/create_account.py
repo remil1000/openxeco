@@ -56,27 +56,52 @@ class CreateAccount(MethodResource, Resource):
         if len(data) > 0:
             return "", "422 An account already exists with this email address"
 
+        # Create user
+
         generated_password = generate_password()
 
-        user = {
-            "email": email,
-            "password": generate_password_hash(generated_password),
-            "is_active": 1,
-            "company_on_subscription": kwargs["company"] if "company" in kwargs else None,
-            "department_on_subscription": kwargs["department"] if "department" in kwargs else None,
-        }
-
         try:
-            self.db.insert(user, self.db.tables["User"])
+            user = self.db.insert({
+                "email": email,
+                "password": generate_password_hash(generated_password),
+                "is_active": 1,
+            }, self.db.tables["User"], commit=False)
         except IntegrityError as e:
             self.db.session.rollback()
             if "Duplicate entry" in str(e):
                 raise ObjectAlreadyExisting
             raise e
 
-        send_email(self.mail,
-                   subject='[CYBERSECURITY LUXEMBOURG] New account',
-                   recipients=[email],
-                   html_body=render_template('new_account.html', url=origin + "/login", password=generated_password))
+        # Create the company request if filled
+
+        try:
+            self.db.insert({
+                "user_id": user.id,
+                "request": "The user requests the access to the entity '"
+                           + kwargs["company"]
+                           + "' with the following department: '"
+                           + kwargs["department"]
+                           + "'",
+                "type": "ENTITY ACCESS CLAIM",
+            }, self.db.tables["Request"], commit=False)
+        except IntegrityError as e:
+            self.db.session.rollback()
+            raise e
+
+        # Send email
+
+        try:
+            send_email(self.mail,
+                       subject='[CYBERSECURITY LUXEMBOURG] New account',
+                       recipients=[email],
+                       html_body=render_template(
+                           'new_account.html',
+                           url=origin + "/login",
+                           password=generated_password)
+                       )
+            self.db.session.commit()
+        except Exception as e:
+            self.db.session.rollback()
+            raise e
 
         return "", "200 "
