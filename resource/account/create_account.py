@@ -65,28 +65,30 @@ class CreateAccount(MethodResource, Resource):
                 "email": email,
                 "password": generate_password_hash(generated_password),
                 "is_active": 1,
-            }, self.db.tables["User"], commit=False)
+            }, self.db.tables["User"])
         except IntegrityError as e:
-            self.db.session.rollback()
             if "Duplicate entry" in str(e):
                 raise ObjectAlreadyExisting
             raise e
 
         # Create the company request if filled
 
-        try:
-            self.db.insert({
-                "user_id": user.id,
-                "request": "The user requests the access to the entity '"
-                           + kwargs["company"]
-                           + "' with the following department: '"
-                           + kwargs["department"]
-                           + "'",
-                "type": "ENTITY ACCESS CLAIM",
-            }, self.db.tables["Request"], commit=False)
-        except IntegrityError as e:
-            self.db.session.rollback()
-            raise e
+        if "company" in kwargs and kwargs["company"] is not None \
+           and "department" in kwargs and kwargs["department"] is not None:
+            try:
+                self.db.insert({
+                    "user_id": user.id,
+                    "request": "The user requests the access to the entity '"
+                               + kwargs["company"]
+                               + "' with the following department: '"
+                               + kwargs["department"]
+                               + "'",
+                    "type": "ENTITY ACCESS CLAIM",
+                }, self.db.tables["UserRequest"])
+            except IntegrityError as e:
+                self.db.session.rollback()
+                self.db.delete(self.db.tables["User"], {"id": user.id})
+                raise e
 
         # Send email
 
@@ -99,9 +101,9 @@ class CreateAccount(MethodResource, Resource):
                            url=origin + "/login",
                            password=generated_password)
                        )
-            self.db.session.commit()
         except Exception as e:
             self.db.session.rollback()
+            self.db.delete(self.db.tables["User"], {"id": user.id})
             raise e
 
         return "", "200 "
