@@ -43,5 +43,5 @@ class GetPublicVcard(MethodResource, Resource):
                 mimetype="text/vcard",
                 headers={"Content-disposition": f"attachment; filename={handle}.vcf"}
             )
-        else:
-            return "", "422 The vcard of the user is not public"
+
+        return "", "422 The vcard of the user is not public"

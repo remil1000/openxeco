@@ -29,4 +29,6 @@ def downgrade():
     op.drop_column('User', 'is_vcard_public')
     op.drop_column('User', 'handle')
     op.add_column('User', sa.Column('company_on_subscription', mysql.VARCHAR(collation='utf8mb4_unicode_ci', length=510), nullable=True))
-    op.add_column('User', sa.Column('department_on_subscription', mysql.ENUM('TOP MANAGEMENT', 'HUMAN RESOURCE', 'MARKETING', 'FINANCE', 'OPERATION/PRODUCTION', 'INFORMATION TECHNOLOGY', 'OTHER'), nullable=True))
+    op.add_column('User', sa.Column('department_on_subscription', mysql.ENUM('TOP MANAGEMENT', 'HUMAN RESOURCE', 'MARKETING',
+                                                                             'FINANCE', 'OPERATION/PRODUCTION', 'INFORMATION TECHNOLOGY',
+                                                                             'OTHER'), nullable=True))
