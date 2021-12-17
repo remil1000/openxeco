@@ -5,8 +5,8 @@ class TestLogin(BaseCase):
 
     def test_ok(self):
         payload = {
-            "email": "test@cybersecurity.lu",
-            "password": "12345678"
+            "email": "test@openxeco.org",
+            "password": "12345678",
         }
 
         response = self.application.post('/account/login',
@@ -17,8 +17,8 @@ class TestLogin(BaseCase):
 
     def test_ko_with_wrong_password(self):
         payload = {
-            "email": "test@cybersecurity.lu",
-            "password": "wrong pass"
+            "email": "test@openxeco.org",
+            "password": "wrong pass",
         }
 
         response = self.application.post('/account/login',
@@ -31,7 +31,7 @@ class TestLogin(BaseCase):
         self.db.merge({"id": 1, "is_active": False}, self.db.tables["User"])
 
         payload = {
-            "email": "test@cybersecurity.lu",
+            "email": "test@openxeco.org",
             "password": "12345678"
         }
 

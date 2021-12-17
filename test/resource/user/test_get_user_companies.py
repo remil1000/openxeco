@@ -17,27 +17,6 @@ class TestGetUserCompanies(BaseCase):
 
         self.assertEqual(200, response.status_code)
         self.assertEqual([
-            {
-                'creation_date': None,
-                'description': None,
-                'status': 'ACTIVE',
-                'id': 14,
-                'image': None,
-                'is_cybersecurity_core_business': 0,
-                'is_startup': 0,
-                'name': 'My company',
-                'trade_register_number': None,
-                'website': None
-            },
-            {
-                'creation_date': None,
-                'description': None,
-                'status': 'ACTIVE',
-                'id': 15,
-                'image': None,
-                'is_cybersecurity_core_business': 0,
-                'is_startup': 0,
-                'name': 'My company2',
-                'trade_register_number': None,
-                'website': None
-            }], response.json)
+            {'company_id': 14, 'department': None, 'user_id': 2},
+            {'company_id': 15, 'department': None, 'user_id': 2}
+        ], response.json)

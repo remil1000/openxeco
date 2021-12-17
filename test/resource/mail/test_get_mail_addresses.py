@@ -26,7 +26,7 @@ class TestGetMailAddresses(BaseCase):
                 'source': 'CONTACT OF COMPANY'
             },
             {
-                'email': 'test@cybersecurity.lu',
+                'email': 'test@openxeco.org',
                 'information': None,
                 'source': 'USER'
             }
@@ -50,7 +50,7 @@ class TestGetMailAddresses(BaseCase):
         self.assertEqual(200, response.status_code)
         self.assertEqual([
             {
-                'email': 'test@cybersecurity.lu',
+                'email': 'test@openxeco.org',
                 'information': None,
                 'source': 'USER'
             }

@@ -5,7 +5,7 @@ class TestRefresh(BaseCase):
 
     def test_ok(self):
         payload = {
-            "email": "test@cybersecurity.lu",
+            "email": "test@openxeco.org",
             "password": "12345678"
         }
 

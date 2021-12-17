@@ -22,7 +22,7 @@ class TestGetMyCompanyCollaborators(BaseCase):
         self.assertEqual(len(response.json), 2)
         self.assertEqual(response.json[0]["id"], 1)
         self.assertEqual(response.json[1]["id"], 2)
-        self.assertEqual(response.json[0]["email"], "test@cybersecurity.lu")
+        self.assertEqual(response.json[0]["email"], "test@openxeco.org")
         self.assertEqual(response.json[1]["email"], "myemail@test.lu")
 
     @BaseCase.login

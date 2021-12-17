@@ -11,7 +11,7 @@ class TestForgotPassword(BaseCase):
         mock_send_mail.return_value = None
 
         payload = {
-            "email": "test@cybersecurity.lu",
+            "email": "test@openxeco.org",
         }
 
         response = self.application.post('/account/forgot_password',
@@ -26,7 +26,7 @@ class TestForgotPassword(BaseCase):
         mock_get.return_value = []
 
         payload = {
-            "email": "test@cybersecurity.lu",
+            "email": "test@openxeco.org",
         }
 
         response = self.application.post('/account/forgot_password',
