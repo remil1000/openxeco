@@ -35,7 +35,7 @@ def upgrade():
     mysql_default_charset='utf8mb4',
     mysql_engine='InnoDB'
     )
-    op.create_index('UC_User_Email', 'User', ['email'], unique=False)
+    op.create_index('UC_User_Email', 'User', ['email'], unique=True)
     op.create_table('Company',
     sa.Column('id', mysql.INTEGER(), autoincrement=True, nullable=False),
     sa.Column('trade_register_number', mysql.VARCHAR(collation='utf8mb4_unicode_ci', length=50), nullable=True),
@@ -161,6 +161,7 @@ def upgrade():
     sa.Column('category', mysql.VARCHAR(charset='utf8mb4', collation='utf8mb4_unicode_ci', length=80), nullable=False),
     sa.ForeignKeyConstraint(['category'], ['TaxonomyCategory.name'], name='taxonomyvalue_ibfk_1', onupdate='CASCADE', ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('name', 'category', name='taxonomy_value_name_category_unique'),
     mysql_collate='utf8mb4_unicode_ci',
     mysql_default_charset='utf8mb4',
     mysql_engine='InnoDB'
@@ -196,7 +197,7 @@ def upgrade():
     mysql_default_charset='utf8mb4',
     mysql_engine='InnoDB'
     )
-    op.create_table('CompanyAddress',
+    op.create_table('Company_Address',
     sa.Column('id', mysql.INTEGER(), autoincrement=True, nullable=False),
     sa.Column('company_id', mysql.INTEGER(), autoincrement=False, nullable=False),
     sa.Column('number', mysql.VARCHAR(charset='utf8mb4', collation='utf8mb4_unicode_ci', length=15), nullable=True),
@@ -246,13 +247,6 @@ def upgrade():
     sa.ForeignKeyConstraint(['company'], ['Company.id'], name='taxonomyassignment_ibfk_1', ondelete='CASCADE'),
     sa.ForeignKeyConstraint(['taxonomy_value'], ['TaxonomyValue.id'], name='taxonomyassignment_ibfk_2', onupdate='CASCADE', ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('company', 'taxonomy_value'),
-    mysql_collate='utf8mb4_unicode_ci',
-    mysql_default_charset='utf8mb4',
-    mysql_engine='InnoDB'
-    )
-    op.create_table('RssFlux',
-    sa.Column('url', mysql.VARCHAR(collation='utf8mb4_unicode_ci', length=255), nullable=False),
-    sa.PrimaryKeyConstraint('url'),
     mysql_collate='utf8mb4_unicode_ci',
     mysql_default_charset='utf8mb4',
     mysql_engine='InnoDB'
@@ -374,7 +368,6 @@ def downgrade():
     op.drop_table('Log')
     op.drop_table('UserRequest')
     op.drop_table('UserGroupAssignment')
-    op.drop_table('RssFlux')
     op.drop_table('ArticleBox')
     op.drop_table('ArticleVersion')
     op.drop_table('Article')
@@ -385,7 +378,7 @@ def downgrade():
     op.drop_table('User')
     op.drop_table('Image')
     op.drop_table('Workforce')
-    op.drop_table('CompanyAddress')
+    op.drop_table('Company_Address')
     op.drop_table('Company')
     op.drop_table('Communication')
     op.drop_table('Source')
