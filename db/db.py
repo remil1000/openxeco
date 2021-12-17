@@ -1,7 +1,10 @@
-from sqlalchemy import MetaData
+import os
+from sqlalchemy import MetaData, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func, and_, or_
+from flask_migrate import Migrate, upgrade
+
 import datetime
 
 
@@ -13,14 +16,33 @@ class SA(SQLAlchemy):
 
 
 class DB:
-    engine = None
-
     def __init__(self, app):
+
+        # Create database in case it is not existing
+
+        uri_without_database = "/".join(str(app.config['SQLALCHEMY_DATABASE_URI']).split("/")[:-1])
+        engine = create_engine(uri_without_database)
+        engine.execute("CREATE DATABASE IF NOT EXISTS " + app.config['SQLALCHEMY_DATABASE_URI'].database)
+        engine.dispose()
+
+        # Init instance
+
         self.instance = SA(app)
         self.instance.init_app(app)
 
+        self.base = None
         self.session = self.instance.session
         self.engine = self.instance.engine
+
+        # Upgrade the structure to always have the latest version
+
+        migration_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "migrations")
+        self.migrate = Migrate(app, self.instance, directory=migration_path)
+
+        with app.app_context():
+            upgrade(directory=migration_path)
+
+        # Init the table objects
 
         self.tables = {}
         self.base = declarative_base()

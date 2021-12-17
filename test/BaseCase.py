@@ -10,13 +10,14 @@ from db.db import DB
 
 class BaseCase(unittest.TestCase):
 
-    email = "test@cybersecurity.lu"
+    email = "test@openxeco.org"
     password = "12345678"
     db = None
 
     def setUp(self):
         self.application = app.test_client()
-        app.config['SQLALCHEMY_DATABASE_URI'].database = "CYBERLUX_TEST"
+        app.config['SQLALCHEMY_DATABASE_URI'].database = "OPENXECO_TEST"
+        app.debug = False
         self.db = DB(app)
 
         self._truncate_database()
@@ -79,7 +80,8 @@ class BaseCase(unittest.TestCase):
     def _truncate_database(self):
         self.db.session.execute(f'SET FOREIGN_KEY_CHECKS = 0;')
         for table in self.db.base.metadata.sorted_tables:
-            self.db.session.execute(f"TRUNCATE TABLE {table.name}")
+            if table.name != "alembic_version":
+                self.db.session.execute(f"TRUNCATE TABLE {table.name}")
         self.db.session.execute(f'SET FOREIGN_KEY_CHECKS = 1;')
 
     @staticmethod

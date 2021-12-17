@@ -1,12 +1,9 @@
-import sys
-
 from flask import Flask
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from flask_mail import Mail
 from flask_restful import Api
-from flask_migrate import Migrate
 from sqlalchemy.engine.url import URL
 from apispec import APISpec
 from apispec.ext.marshmallow import MarshmallowPlugin
@@ -62,7 +59,6 @@ app.config['APISPEC_SPEC'] = APISpec(
 
 # Create DB instance
 db = DB(app)
-migrate = Migrate(app, db.instance)
 
 # Add additional plugins
 cors = CORS(app)
