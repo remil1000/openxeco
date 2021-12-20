@@ -1,11 +1,9 @@
 import functools
 import json
 import unittest
+import os
 
 from flask_bcrypt import generate_password_hash
-
-from app import app
-from db.db import DB
 
 
 class BaseCase(unittest.TestCase):
@@ -15,10 +13,14 @@ class BaseCase(unittest.TestCase):
     db = None
 
     def setUp(self):
+        os.environ["DB_NAME"] = "OPENXECO_TEST"
+        if "INITIAL_ADMIN_EMAIL" in os.environ:
+            del os.environ["INITIAL_ADMIN_EMAIL"]
+
+        from app import app, db
         self.application = app.test_client()
-        app.config['SQLALCHEMY_DATABASE_URI'].database = "OPENXECO_TEST"
+        self.db = db
         app.debug = False
-        self.db = DB(app)
 
         self._truncate_database()
 

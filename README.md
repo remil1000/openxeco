@@ -119,6 +119,11 @@ Run the test coverage report (with the venv activated)
 > coverage run --source=resource,utils,db,decorator -m unittest discover && coverage report
 ```
 
+Run the test coverage report (with the venv activated) for a specific package
+```
+> coverage run --source=resource/user -m unittest discover test/resource/user/ && coverage report
+```
+
 Run the test coverage report and generate in HTML (with the venv activated)
 ```
 > coverage run --source=resource,utils,db,decorator -m unittest discover && coverage html
