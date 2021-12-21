@@ -1,53 +1,26 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [1.7.0] - XXXX-XX-XX
+## [1.7.0] - 2022-01-06
   
-Update the database structure with the following file:
-- db/sql/diff/v1.6.sql
+Update the database structure bu using the following command:
+- flask db upgrade
 
 ### Added
 
-- mail/get_mail_addresses resource
-- mail/send_communication resource
+- Dockerization configuration
+- GitHub Action to deploy bo-api container
+- flask_migrate with replicated structure in the first revision
+- Initial user creation and configuration for start of new instance
+- private/generate_mu_user_handle resource
  
 ### Changed
   
--
- 
-### Fixed
- 
--
-
-## [1.6.0] - XXXX-XX-XX
-  
-Update the database structure with the following file:
-- db/sql/diff/v1.6.sql
-
-### Added
-
-- mail/get_mail_addresses resource
-- mail/send_communication resource
- 
-### Changed
-  
--
- 
-### Fixed
- 
--
- 
-## [1.5.1] - 2021-07-25
-  
-No additional step for the update
-
-### Added
-
-- CHANGELOG.md file
- 
-### Changed
-  
-- Added the "include_tags" parameter for the public/get_related_articles resource
+- Rename application.py to app.py
+- Rename application.wsgi to wsgi.py
+- Database structure defined on 54992185f712 revision
+- Request process when a user subscribe with company info
+- Unit testing environment to be adapted to the new config system
  
 ### Fixed
  
