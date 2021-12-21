@@ -13,13 +13,13 @@ ENV DB_HOSTNAME=cybersecurityluxembourg-db
 ENV DB_USERNAME=openxeco
 ENV DB_PASSWORD=openxeco
 
-#ENV MAIL_SERVER
-#ENV MAIL_PORT
-#ENV MAIL_USERNAME
-#ENV MAIL_PASSWORD
+ENV MAIL_SERVER=foo_mail_server
+ENV MAIL_PORT=foo_mail_port
+ENV MAIL_USERNAME=foo_mail_username
+ENV MAIL_PASSWORD=foo_mail_password
 ENV MAIL_USE_TLS=True
 ENV MAIL_USE_SSL=True
-#ENV MAIL_DEFAULT_SENDER
+ENV MAIL_DEFAULT_SENDER=foo_mail_default_sender@foo.com
 
 ENV IMAGE_FOLDER=/openxeco_media
 
