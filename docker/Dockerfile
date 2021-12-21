@@ -35,6 +35,7 @@ RUN pip install -r requirements.txt
 COPY db             /app/db
 COPY decorator      /app/decorator
 COPY exception      /app/exception
+COPY migrations       /app/migrations
 COPY resource       /app/resource
 COPY template       /app/template
 COPY utils          /app/utils
@@ -47,4 +48,4 @@ COPY docker/entrypoint.sh /entrypoint.sh
 
 EXPOSE 5000
 
-CMD /entrypoint.sh
+CMD ["/entrypoint.sh"]
