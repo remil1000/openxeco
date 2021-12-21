@@ -43,7 +43,6 @@ COPY routes.py      /app/
 COPY app.py /app/app.py
 
 COPY config         /app/config
-COPY config/config.py.sample /app/config/config.py
 COPY docker/entrypoint.sh /entrypoint.sh
 
 EXPOSE 5000
