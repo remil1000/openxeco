@@ -1,4 +1,7 @@
 version: "3"
+networks:
+  backend:
+    driver: bridge
 services:
   cybersecurityluxembourg-db:
     image: mysql:8.0
@@ -12,6 +15,8 @@ services:
       MYSQL_DATABASE: "OPENXECO"
       MYSQL_USER: "openxeco"
       MYSQL_PASSWORD: "openxeco"
+    networks:
+      - backend
   cybersecurityluxembourg-bo-api:
     image: "cybersecurityluxembourg-bo-api:latest"
     restart: always
@@ -30,4 +35,6 @@ services:
       INITIAL_ADMIN_EMAIL: "your.email@localhost.localdomain"
     depends_on:
       - cybersecurityluxembourg-db
+    networks:
+      - backend
 
