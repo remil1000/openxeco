@@ -1,14 +1,12 @@
 import os
 
-"""
+
 def _getenv(key, default=None, mandatory=True):
     if mandatory:
-        if key in os.environ or not default is None:
+        if key in os.environ or default is not None:
             return os.getenv(key, default)
-        else:
-            raise KeyError("environment variable '%s' not set" % key)
-    if not mandatory:
-        return os.getenv(key, default)
+        raise KeyError("environment variable '%s' not set" % key)
+    return os.getenv(key, default)
 
 
 ENVIRONMENT    = _getenv('ENVIRONMENT',    default='dev')
@@ -38,35 +36,8 @@ INITIAL_ADMIN_EMAIL = _getenv('INITIAL_ADMIN_EMAIL', mandatory=False)
 
 IMAGE_FOLDER        = _getenv('IMAGE_FOLDER',     default="/openxeco_media")
 
-CORS_DOMAINS        = _getenv('CORS_DOMAINS',    default="localhost:*")
+CORS_DOMAINS        = _getenv('CORS_DOMAINS',    default="localhost:\\d*")
 # remove extra spaces, remove empty items
 domains = filter(len, map(str.strip, CORS_DOMAINS.split(",")))
-CORS_ORIGINS = list(map(lambda d: r'(.*\.)?{}'.format(d), domains))
-"""
-
-ENVIRONMENT="dev"
-
-JWT_SECRET_KEY="my_secret_developer_key"
-
-DB_CONFIG = {
-    'drivername': 'mysql+pymysql',
-    'host':       "localhost",
-    'port':       3306,
-    'database':   "CYBERLUX",
-    'username':   "root",
-    'password':   "DBDevSMILE20"
-}
-
-MAIL_SERVER="localhost"
-MAIL_PORT=1025
-MAIL_USERNAME="cyberlux-app@securitymadein.lu"
-MAIL_PASSWORD=None
-MAIL_USE_TLS=False
-MAIL_USE_SSL=False
-MAIL_DEFAULT_SENDER="cyberlux-app@securitymadein.lu"
-
-IMAGE_FOLDER="C:\\image_folder"
-
-CORS_ORIGINS="*"
-
-INITIAL_ADMIN_EMAIL = "alexis.prunier@securitymadein.lu"
+# pylint: disable=unnecessary-lambda
+CORS_ORIGINS = list(map(lambda d: r'((http|https)://)?(.*\.)?{}'.format(d), domains))
