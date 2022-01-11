@@ -442,3 +442,22 @@ class DB:
             query = query.order_by(self.tables["Image"].creation_date.asc())
 
         return query
+
+    ###############
+    # DOCUMENT    #
+    ###############
+
+    def get_filtered_document_query(self, filters=None):
+        filters = {} if filters is None else filters
+
+        query = self.session.query(self.tables["Document"])
+
+        if "search" in filters and len(filters["search"]) > 0:
+            query = query.filter(self.tables["Document"].filename.contains(f"%{filters['search']}%"))
+
+        if "order" in filters and filters["order"] == "desc":
+            query = query.order_by(self.tables["Document"].creation_date.desc())
+        else:
+            query = query.order_by(self.tables["Document"].creation_date.asc())
+
+        return query
