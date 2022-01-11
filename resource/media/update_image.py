@@ -21,7 +21,6 @@ class UpdateImage(MethodResource, Resource):
          description='Update an image on the media library.',
          responses={
              "200": {},
-             "500": {"description": "An error occurred while saving the file"},
          })
     @use_kwargs({
         'id': fields.Int(),
