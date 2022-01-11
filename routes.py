@@ -62,9 +62,15 @@ from resource.mail.get_mail_content import GetMailContent
 from resource.mail.save_template import SaveTemplate
 from resource.mail.send_mail import SendMail
 from resource.media.add_image import AddImage
+from resource.media.add_document import AddDocument
+from resource.media.delete_image import DeleteImage
+from resource.media.delete_document import DeleteDocument
 from resource.media.update_image import UpdateImage
+from resource.media.update_document import UpdateDocument
 from resource.media.get_images import GetImages
+from resource.media.get_documents import GetDocuments
 from resource.media.get_image import GetImage
+from resource.media.get_document import GetDocument
 from resource.network.add_network_node import AddNetworkNode
 from resource.network.delete_network_node import DeleteNetworkNode
 from resource.network.get_node_information import GetNodeInformation
