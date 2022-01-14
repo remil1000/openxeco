@@ -2,6 +2,7 @@ from flask_apispec import MethodResource
 from flask_apispec import doc
 from flask_jwt_extended import jwt_required
 from flask_restful import Resource
+from sqlalchemy import or_
 
 from db.db import DB
 from decorator.catch_exception import catch_exception
@@ -18,7 +19,7 @@ class GetDocument(MethodResource, Resource):
 
     @log_request
     @doc(tags=['media'],
-         description='Get a document object from the media library by its ID',
+         description='Get a document object from the media library by its filename or ID',
          responses={
              "200": {},
              "422": {"description": "Object not found"},
@@ -28,7 +29,10 @@ class GetDocument(MethodResource, Resource):
     @catch_exception
     def get(self, id_):
 
-        data = self.db.get(self.db.tables["Document"], {"id": id_})
+        data = self.db.session.query(self.db.tables["Document"]) \
+            .filter(or_(self.db.tables["Document"].id == id_,
+                        self.db.tables["Document"].filename == id_)) \
+            .all()
 
         if len(data) < 1:
             raise ObjectNotFound

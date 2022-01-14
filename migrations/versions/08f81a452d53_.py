@@ -20,6 +20,7 @@ def upgrade():
     op.create_table('Document',
     sa.Column('id', mysql.INTEGER(), autoincrement=True, nullable=False),
     sa.Column('filename', mysql.VARCHAR(collation='utf8mb4_unicode_ci', length=200), nullable=False),
+    sa.Column('size', mysql.INTEGER(), autoincrement=False, nullable=False),
     sa.Column('creation_date', sa.DATE(), nullable=False),
     sa.Column('keywords', mysql.VARCHAR(collation='utf8mb4_unicode_ci', length=510), nullable=True),
     sa.PrimaryKeyConstraint('id'),
@@ -27,6 +28,7 @@ def upgrade():
     mysql_default_charset='utf8mb4',
     mysql_engine='InnoDB'
     )
+    op.create_index('UC_Document_Filename', 'Document', ['filename'], unique=True)
 
 
 def downgrade():

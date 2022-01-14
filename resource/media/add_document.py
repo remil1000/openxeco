@@ -4,14 +4,14 @@ import io
 import os
 import traceback
 
-import PyPDF2
 from flask_apispec import MethodResource
 from flask_apispec import use_kwargs, doc
 from flask_jwt_extended import jwt_required
 from flask_restful import Resource
 from webargs import fields
+from sqlalchemy.exc import IntegrityError
 
-from config.config import IMAGE_FOLDER
+from config.config import DOCUMENT_FOLDER
 from decorator.catch_exception import catch_exception
 from decorator.log_request import log_request
 from decorator.verify_admin_access import verify_admin_access
@@ -31,7 +31,7 @@ class AddDocument(MethodResource, Resource):
          description='Add a document to the media library. Return a dictionary with the data of the new object',
          responses={
              "200": {},
-             "500": {"description": "An error occurred while saving the file"},
+             "422": {"description": "A document is already existing with that filename"},
          })
     @use_kwargs({
         'filename': fields.Str(),
@@ -45,17 +45,24 @@ class AddDocument(MethodResource, Resource):
         # Create object to save
 
         document = {
-            "filename": kwargs["name"],
+            "filename": kwargs["filename"],
+            "size": len(kwargs["data"]),
             "creation_date": datetime.date.today()
         }
 
-        document = self.db.insert(document, self.db.tables["Document"])
+        try:
+            document = self.db.insert(document, self.db.tables["Document"])
+        except IntegrityError as e:
+            self.db.session.rollback()
+            if "Duplicate entry" in str(e):
+                return "", "422 A document is already existing with that filename"
+            raise e
 
         # Save file in dir
 
         try:
-            stream = io.BytesIO(base64.b64decode(kwargs["data"].split(",")[-1]))
-            f = open(os.path.join(IMAGE_FOLDER, "document_" + str(document.id)), 'wb')
+            stream = io.BytesIO(base64.b64decode(kwargs["data"]))
+            f = open(os.path.join(DOCUMENT_FOLDER, str(document.id)), 'wb')
             f.write(stream.read())
             f.close()
         except Exception:

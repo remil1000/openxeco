@@ -96,7 +96,6 @@ from resource.private.is_logged import IsLogged
 from resource.private.update_my_article import UpdateMyArticle
 from resource.private.update_my_article_content import UpdateMyArticleContent
 from resource.private.update_my_user import UpdateMyUser
-from resource.public.get_public_image import GetPublicImage
 from resource.public.get_article_content import GetArticleContent
 from resource.public.get_article_enums import GetArticleEnums
 from resource.public.get_public_articles import GetPublicArticles
@@ -105,6 +104,8 @@ from resource.public.get_public_analytics import GetPublicAnalytics
 from resource.public.get_public_companies import GetPublicCompanies
 from resource.public.get_public_company_geolocations import GetPublicCompanyGeolocations
 from resource.public.get_public_company import GetPublicCompany
+from resource.public.get_public_document import GetPublicDocument
+from resource.public.get_public_image import GetPublicImage
 from resource.public.get_public_settings import GetPublicSettings
 from resource.public.get_public_taxonomy_values import GetPublicTaxonomyValues
 from resource.public.get_public_taxonomy import GetPublicTaxonomy

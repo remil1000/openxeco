@@ -453,7 +453,8 @@ class DB:
         query = self.session.query(self.tables["Document"])
 
         if "search" in filters and len(filters["search"]) > 0:
-            query = query.filter(self.tables["Document"].filename.contains(f"%{filters['search']}%"))
+            query = query.filter(or_(self.tables["Document"].filename.contains(f"%{filters['search']}%"),
+                                     self.tables["Document"].keywords.contains(f"%{filters['search']}%")))
 
         if "order" in filters and filters["order"] == "desc":
             query = query.order_by(self.tables["Document"].creation_date.desc())

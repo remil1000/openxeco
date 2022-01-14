@@ -3,10 +3,12 @@ from flask_apispec import use_kwargs, doc
 from flask_jwt_extended import jwt_required
 from flask_restful import Resource
 from webargs import fields
+import os
 
 from decorator.catch_exception import catch_exception
 from decorator.log_request import log_request
 from decorator.verify_admin_access import verify_admin_access
+from config.config import DOCUMENT_FOLDER
 
 
 class DeleteDocument(MethodResource, Resource):
@@ -29,6 +31,11 @@ class DeleteDocument(MethodResource, Resource):
     @verify_admin_access
     @catch_exception
     def post(self, **kwargs):
+
+        try:
+            os.remove(os.path.join(DOCUMENT_FOLDER, str(kwargs["id"])))
+        except FileNotFoundError:
+            pass
 
         self.db.delete(self.db.tables["Document"], {"id": kwargs["id"]})
 
