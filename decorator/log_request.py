@@ -25,6 +25,9 @@ def log_request(function):
             if "image" in params:
                 params["image"] = "[SERVER] NOT LOGGED"
 
+            if "data" in params:
+                params["data"] = "[SERVER] NOT LOGGED"
+
             params = json.dumps(params)
 
         log = {
