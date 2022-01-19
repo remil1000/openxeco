@@ -2,6 +2,7 @@ import copy
 import json
 import re
 from datetime import datetime
+from urllib3 import ProxyManager
 from urllib import request
 
 from flask_apispec import MethodResource
@@ -11,6 +12,7 @@ from flask_restful import Resource
 from sqlalchemy import func
 
 from db.db import DB
+from config.config import HTTP_PROXY
 from decorator.catch_exception import catch_exception
 from decorator.log_request import log_request
 from decorator.verify_admin_access import verify_admin_access
@@ -38,8 +40,15 @@ class UpdateMoovijobJobOffers(MethodResource, Resource):
         base_url = "https://www.moovijob.com/api/job-offers/search?job_categories[]=informatique-consulting" \
                    "&job_categories[]=informatique-dev&job_categories[]=informatique-infra-reseau&q=security"
 
-        response = request.urlopen(base_url)  # nosec
-        data = json.loads(response.read())
+        if HTTP_PROXY is not None:
+            http = ProxyManager(HTTP_PROXY)
+            response = http.request('GET', base_url)
+            content = response.data
+        else:
+            response = request.urlopen(base_url)  # nosec
+            content = response.read()
+
+        data = json.loads(content)
 
         external_references = []
 
@@ -96,8 +105,15 @@ class UpdateMoovijobJobOffers(MethodResource, Resource):
             current_page += 1
 
             if current_page <= nb_pages:
-                response = request.urlopen(f"{base_url}&page={current_page}")  # nosec
-                data = json.loads(response.read())
+                if HTTP_PROXY is not None:
+                    http = ProxyManager(HTTP_PROXY)
+                    response = http.request('GET', f"{base_url}&page={current_page}")
+                    content = response.data
+                else:
+                    response = request.urlopen(f"{base_url}&page={current_page}")  # nosec
+                    content = response.read()
+
+                data = json.loads(content)
 
         # Deactivate the missing offers
 
