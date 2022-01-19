@@ -30,6 +30,8 @@ MAIL_USE_TLS        = _getenv('MAIL_USE_TLS',    default="True")
 MAIL_USE_SSL        = _getenv('MAIL_USE_SSL',    default="True")
 MAIL_DEFAULT_SENDER = _getenv('MAIL_DEFAULT_SENDER', mandatory=True)
 
+HTTP_PROXY          = _getenv('HTTP_PROXY', mandatory=False)
+
 # if set the initial admin must issue a forgot password request
 # this implies mail delivery is properly configured
 INITIAL_ADMIN_EMAIL = _getenv('INITIAL_ADMIN_EMAIL', mandatory=False)
