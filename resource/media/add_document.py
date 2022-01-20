@@ -61,9 +61,8 @@ class AddDocument(MethodResource, Resource):
         # Save file in dir
 
         try:
-            stream = io.BytesIO(base64.b64decode(kwargs["data"]))
             f = open(os.path.join(DOCUMENT_FOLDER, str(document.id)), 'wb')
-            f.write(stream.read())
+            f.write(kwargs["data"].encode('latin-1'))
             f.close()
         except Exception:
             self.db.delete(self.db.tables["Document"], {"id": document.id})
