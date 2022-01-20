@@ -29,7 +29,15 @@ def upgrade():
     mysql_engine='InnoDB'
     )
     op.create_index('UC_Document_Filename', 'Document', ['filename'], unique=True)
+    op.add_column('RssFeed', sa.Column('company_id', mysql.INTEGER(), nullable=True))
+    op.create_foreign_key(
+        'fk_company_rssfeed',
+        'RssFeed', 'Company',
+        ['company_id'], ['id'],
+    )
 
 
 def downgrade():
     op.drop_table('Document')
+    op.drop_constraint('fk_company_rssfeed', 'RssFeed', 'foreignkey')
+    op.drop_column('RssFeed', 'company_id')
