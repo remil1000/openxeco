@@ -19,7 +19,8 @@ DB_CONFIG = {
     'port':       _getenv('DB_PORT',      default='3306'),
     'database':   _getenv('DB_NAME',      default='OPENXECO'),
     'username':   _getenv('DB_USERNAME',  default='openxeco'),
-    'password':   _getenv('DB_PASSWORD',  mandatory=True)
+    'password':   _getenv('DB_PASSWORD',  mandatory=True),
+    'query':      {'charset': _getenv('DB_CHARSET', default='utf8mb4')},
 }
 
 MAIL_SERVER         = _getenv('MAIL_SERVER',     mandatory=False)
