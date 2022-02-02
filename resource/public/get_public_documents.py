@@ -10,13 +10,13 @@ from decorator.log_request import log_request
 from utils.serializer import Serializer
 
 
-class GetDocuments(MethodResource, Resource):
+class GetPublicDocuments(MethodResource, Resource):
 
     def __init__(self, db: DB):
         self.db = db
 
     @log_request
-    @doc(tags=['media'],
+    @doc(tags=['public'],
          description='Get documents object from the media library',
          responses={
              "200": {},
@@ -25,9 +25,8 @@ class GetDocuments(MethodResource, Resource):
         'page': fields.Int(required=False, missing=1, validate=validate.Range(min=1)),
         'per_page': fields.Int(required=False, missing=50, validate=validate.Range(min=1, max=50)),
         'order': fields.Str(required=False, missing='desc', validate=lambda x: x in ['desc', 'asc']),
-        'search': fields.Str(required=False),
+        'search': fields.Str(required=False, validate=validate.Length(min=3)),
     }, location="query")
-    @jwt_required
     @catch_exception
     def get(self, **kwargs):
 

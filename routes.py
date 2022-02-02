@@ -68,7 +68,6 @@ from resource.media.delete_document import DeleteDocument
 from resource.media.update_image import UpdateImage
 from resource.media.update_document import UpdateDocument
 from resource.media.get_images import GetImages
-from resource.media.get_documents import GetDocuments
 from resource.media.get_image import GetImage
 from resource.media.get_document import GetDocument
 from resource.network.add_network_node import AddNetworkNode
@@ -105,6 +104,7 @@ from resource.public.get_public_companies import GetPublicCompanies
 from resource.public.get_public_company_geolocations import GetPublicCompanyGeolocations
 from resource.public.get_public_company import GetPublicCompany
 from resource.public.get_public_document import GetPublicDocument
+from resource.public.get_public_documents import GetPublicDocuments
 from resource.public.get_public_image import GetPublicImage
 from resource.public.get_public_settings import GetPublicSettings
 from resource.public.get_public_taxonomy_values import GetPublicTaxonomyValues
