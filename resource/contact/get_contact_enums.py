@@ -27,7 +27,8 @@ class GetContactEnums(MethodResource, Resource):
 
         data = {
             "type": self.db.tables["CompanyContact"].type.prop.columns[0].type.enums,
-            "representative": self.db.tables["CompanyContact"].representative.prop.columns[0].type.enums
+            "representative": self.db.tables["CompanyContact"].representative.prop.columns[0].type.enums,
+            "department": self.db.tables["CompanyContact"].department.prop.columns[0].type.enums
         }
 
         return data, "200 "

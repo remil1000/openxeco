@@ -35,9 +35,15 @@ def upgrade():
         'RssFeed', 'Company',
         ['company_id'], ['id'],
     )
+    op.add_column('CompanyContact',
+                  sa.Column('department', mysql.ENUM('TOP MANAGEMENT', 'HUMAN RESOURCE', 'MARKETING',
+                                                     'FINANCE', 'OPERATION/PRODUCTION',
+                                                     'INFORMATION TECHNOLOGY',
+                                                     'OTHER'), nullable=True))
 
 
 def downgrade():
     op.drop_table('Document')
     op.drop_constraint('fk_company_rssfeed', 'RssFeed', 'foreignkey')
     op.drop_column('RssFeed', 'company_id')
+    op.drop_column('CompanyContact', 'department')

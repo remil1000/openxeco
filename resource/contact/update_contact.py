@@ -29,6 +29,10 @@ class UpdateContact(MethodResource, Resource):
         'representative': fields.Str(required=False, allow_none=True),
         'name': fields.Str(required=False, allow_none=True),
         'value': fields.Str(required=False, allow_none=True),
+        'department': fields.Str(
+            allow_none=True,
+            validate=lambda x: x in ['TOP MANAGEMENT', 'HUMAN RESOURCE', 'MARKETING', 'FINANCE', 'OPERATION/PRODUCTION',
+                                     'INFORMATION TECHNOLOGY', 'OTHER', None]),
     })
     @jwt_required
     @verify_admin_access
